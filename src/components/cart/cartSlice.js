@@ -3,6 +3,7 @@ import {
   addCartItemsApi,
   deleteCartItemsApi,
   fetchCartItemsApi,
+  updateCartItemsApi,
 } from "./cartApi";
 
 const initialState = {
@@ -22,7 +23,12 @@ export const addAsyncCartItems = createAsyncThunk(
   "cart/addcart",
   async (item) => {
     const { title, thumbnail, price } = item;
-    const response = await addCartItemsApi({ title, thumbnail, price,quantity:1 });
+    const response = await addCartItemsApi({
+      title,
+      thumbnail,
+      price,
+      quantity: 1,
+    });
     return response.data;
   }
 );
@@ -30,9 +36,18 @@ export const addAsyncCartItems = createAsyncThunk(
 export const deleteAsyncCartItems = createAsyncThunk(
   "cart/deletecart",
   async (id) => {
-    const response = await deleteCartItemsApi(id);
-    console.log("respomse==>", response);
+    await deleteCartItemsApi(id);
     return id;
+  }
+);
+
+export const updateAsyncCartItems = createAsyncThunk(
+  "cart/updatecart",
+  async ({ id, quantity }) => {
+    console.log("id,change===>", id, quantity);
+    const response = await updateCartItemsApi({ id, quantity });
+    console.log("respomse==>", response);
+    return response.data;
   }
 );
 
@@ -60,6 +75,13 @@ export const cartSlice = createSlice({
         );
         console.log("index==>", action.payload, index);
         state.items.splice(index, 1);
+        state.status = "idle";
+      })
+      .addCase(updateAsyncCartItems.fulfilled, (state, action) => {
+        const index = state.items.findIndex(
+          (item) => item.id == action.payload.id
+        );
+        state.items.splice(index, 1, action.payload);
         state.status = "idle";
       });
   },
