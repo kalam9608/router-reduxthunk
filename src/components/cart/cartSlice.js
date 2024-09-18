@@ -43,9 +43,8 @@ export const deleteAsyncCartItems = createAsyncThunk(
 
 export const updateAsyncCartItems = createAsyncThunk(
   "cart/updatecart",
-  async ({ id, quantity }) => {
-    console.log("id,change===>", id, quantity);
-    const response = await updateCartItemsApi({ id, quantity });
+  async ({ id, changeQuantity }) => {
+    const response = await updateCartItemsApi(id, changeQuantity);
     console.log("respomse==>", response);
     return response.data;
   }

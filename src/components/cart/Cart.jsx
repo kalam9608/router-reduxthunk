@@ -13,8 +13,12 @@ const Cart = () => {
     dispatch(fetchAsyncCartItems());
   }, []);
   const changeHandler = (e, id) => {
-    console.log("2===>", e.target.value);
-    dispatch(updateAsyncCartItems({ id, quantity: e.target.value }));
+    dispatch(
+      updateAsyncCartItems({
+        id,
+        changeQuantity: { quantity: +e.target.value },
+      })
+    );
   };
   return (
     <div className="m-4 max-w-md mx-auto">
