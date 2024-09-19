@@ -4,6 +4,7 @@ import {
   deleteAsyncCartItems,
   fetchAsyncCartItems,
   updateAsyncCartItems,
+  updateQuantityAsyncCartItems,
 } from "./cartSlice";
 
 const Cart = () => {
@@ -20,10 +21,29 @@ const Cart = () => {
       })
     );
   };
+
+  const handleAddQuantity = (id, quantity, type) => {
+    if (type == "add") {
+      dispatch(
+        updateQuantityAsyncCartItems({
+          id,
+          changeQuantity: { quantity: quantity + 1 },
+        })
+      );
+    } else {
+      if (quantity > 0)
+        dispatch(
+          updateQuantityAsyncCartItems({
+            id,
+            changeQuantity: { quantity: quantity - 1 },
+          })
+        );
+    }
+  };
   return (
-    <div className="m-4 max-w-md mx-auto">
+    <div className="m-4 max-w-xl mx-auto">
       {items.map((item) => (
-        <div className="m-2 flex justify-between items-center px-2 max-w-md rounded overflow-hidden shadow-lg bg-gray-500">
+        <div className="m-2 flex justify-between items-center px-2 max-w-full rounded overflow-hidden shadow-lg bg-gray-500">
           <img className="w-24 h-24" src={item.thumbnail} alt="Product" />
           <div className="px-6 py-4">
             <div className="font-bold text-sm text-white mb-2">
@@ -33,8 +53,8 @@ const Cart = () => {
               ${item.price}
             </span>
           </div>
-          <div className="px-6 py-4">
-            <select
+          <div className="px-2 py-1 border rounded-md">
+            {/* <select
               name="quantity"
               id=""
               value={item.quantity}
@@ -43,7 +63,23 @@ const Cart = () => {
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
-            </select>
+            </select> */}
+            <p className="text-white font-bold">Qty:{item.quantity}</p>
+          </div>
+          <div className="flex px-1 py-4">
+            <button
+              onClick={() => handleAddQuantity(item.id, item.quantity, "add")}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-4 text-xs"
+            >
+              +
+            </button>
+
+            <button
+              onClick={() => handleAddQuantity(item.id, item.quantity)}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-4 text-xs"
+            >
+              -
+            </button>
           </div>
           <div className="px-6 pt-4 pb-2">
             <button

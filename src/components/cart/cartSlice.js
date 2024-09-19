@@ -22,8 +22,8 @@ export const fetchAsyncCartItems = createAsyncThunk(
 export const addAsyncCartItems = createAsyncThunk(
   "cart/addcart",
   async (item) => {
-    console.log("product===>",item)
-    const { title, thumbnail, price ,quantity } = item;
+    console.log("product===>", item);
+    const { title, thumbnail, price, quantity } = item;
     const response = await addCartItemsApi({
       title,
       thumbnail,
@@ -44,6 +44,15 @@ export const deleteAsyncCartItems = createAsyncThunk(
 
 export const updateAsyncCartItems = createAsyncThunk(
   "cart/updatecart",
+  async ({ id, changeQuantity }) => {
+    const response = await updateCartItemsApi(id, changeQuantity);
+    console.log("respomse==>", response);
+    return response.data;
+  }
+);
+
+export const updateQuantityAsyncCartItems = createAsyncThunk(
+  "cart/updateQuantitycart",
   async ({ id, changeQuantity }) => {
     const response = await updateCartItemsApi(id, changeQuantity);
     console.log("respomse==>", response);
@@ -78,6 +87,13 @@ export const cartSlice = createSlice({
         state.status = "idle";
       })
       .addCase(updateAsyncCartItems.fulfilled, (state, action) => {
+        const index = state.items.findIndex(
+          (item) => item.id == action.payload.id
+        );
+        state.items.splice(index, 1, action.payload);
+        state.status = "idle";
+      })
+      .addCase(updateQuantityAsyncCartItems.fulfilled, (state, action) => {
         const index = state.items.findIndex(
           (item) => item.id == action.payload.id
         );
