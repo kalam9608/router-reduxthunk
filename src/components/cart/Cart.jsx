@@ -55,6 +55,15 @@ const Cart = () => {
           </div>
         </div>
       ))}
+
+      <div className="m-2 p-2 flex justify-between items-center px-2 max-w-md rounded overflow-hidden shadow-lg bg-gray-500">
+        <p className="text-md font-bold text-white text-center">
+          Total :
+          {items.reduce((acc, item) => {
+            return item.price * item.quantity + acc;
+          }, 0)}
+        </p>
+      </div>
     </div>
   );
 };

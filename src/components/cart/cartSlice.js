@@ -22,12 +22,13 @@ export const fetchAsyncCartItems = createAsyncThunk(
 export const addAsyncCartItems = createAsyncThunk(
   "cart/addcart",
   async (item) => {
-    const { title, thumbnail, price } = item;
+    console.log("product===>",item)
+    const { title, thumbnail, price ,quantity } = item;
     const response = await addCartItemsApi({
       title,
       thumbnail,
       price,
-      quantity: 1,
+      quantity: quantity,
     });
     return response.data;
   }
